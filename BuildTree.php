@@ -43,14 +43,14 @@ foreach($numList as $num){
 
     // This section prints the tree after adding each element to the tree
     // If status = "empty"
-    // if($status == "success"){
-    //   echo "<li>Result Tree: ";
-    //   showTree($root);
-    //   echo "</li>";
-    // }
-    // elseif($status == "fail-dupe"){
-    //   echo "<li>Value already exists in tree.</li>";
-    // }
+    if($status == "success"){
+      // echo "<li>Result Tree: ";
+      // showTree($root);
+      // echo "</li>";
+    }
+    elseif($status == "fail-dupe"){
+      echo "<li>Value already exists in tree.</li>";
+    }
 
     echo "</ol><hr>";
   }
@@ -68,5 +68,5 @@ echo "<h2><strong>Tree after list processing: </strong></h2>";
 showTree($root);
 echo "<hr>";
 
-// require_once "views/view_tree.php";
+require_once "views/view_tree.php";
 ?>
