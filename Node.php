@@ -33,7 +33,7 @@ class Node {
     $this->childNodes["mid"] = NULL;
     $this->childNodes["right"] = NULL;
 
-    // These are temporary when a parent needs to split too
+    // These are temporary when a parent needs to split
     $this->childNodes["LR"] = NULL;
     $this->childNodes["MR"] = NULL;
     $this->childNodes["RR"] = NULL;
@@ -67,74 +67,75 @@ class Node {
       echo "<li>has no parent node.</li>";
     }
 
-    // Show left child
-    if($this->childNodes["left"] != NULL){
-      $d = $this->childNodes["left"]->getData();
-
-      if(gettype($d) == "array"){
-        echo "L: ".implode(', ', $d)."\t";
-      }
-      else{
-        echo "L: ".$d."\t";
-      }
-
-    }
-    // Show left-right child if we have it
-    if($this->childNodes["LR"] != NULL){
-      $d = $this->childNodes["LR"]->getData();
-
-      if(gettype($d) == "array"){
-        echo "LR: ".implode(', ', $d)."\t";
-      }
-      else{
-        echo "LR: ".$d."\t";
-      }
-    }
-
-    // ... middle child
-    if($this->childNodes["mid"] != NULL){
-      $d = $this->childNodes["mid"]->getData();
-
-      if(gettype($d) == "array"){
-        echo "M: ".implode(', ', $d)."\t";
-      }
-      else{
-        echo "M: ".$d."\t";
-      }
-    }
-    // ... middle-right child
-    if($this->childNodes["MR"] != NULL){
-      $d = $this->childNodes["MR"]->getData();
-
-      if(gettype($d) == "array"){
-        echo "MR: ".implode(', ', $d)."\t";
-      }
-      else{
-        echo "MR: ".$d."\t";
-      }
-    }
-
-    // ... right child
-    if($this->childNodes["right"] != NULL){
-      $d = $this->childNodes["right"]->getData();
-      if(gettype($d) == "array"){
-        echo "R: ".implode(', ', $d)."\t";
-      }
-      else{
-        echo "R: ".$d."\t";
-      }
-    }
-    // ... right-right child
-    if($this->childNodes["RR"] != NULL){
-      $d = $this->childNodes["RR"]->getData();
-
-      if(gettype($d) == "array"){
-        echo "RR: ".implode(', ', $d)."\t";
-      }
-      else{
-        echo "RR: ".$d."\t";
-      }
-    }
+    // echo "<li>Children: </li>";
+    // // Show left child
+    // if($this->childNodes["left"] != NULL){
+    //   $d = $this->childNodes["left"]->getData();
+    //
+    //   if(gettype($d) == "array"){
+    //     echo "L: ".implode(', ', $d)."\t";
+    //   }
+    //   else{
+    //     echo "L: ".$d."\t";
+    //   }
+    //
+    // }
+    // // Show left-right child if we have it
+    // if($this->childNodes["LR"] != NULL){
+    //   $d = $this->childNodes["LR"]->getData();
+    //
+    //   if(gettype($d) == "array"){
+    //     echo "LR: ".implode(', ', $d)."\t";
+    //   }
+    //   else{
+    //     echo "LR: ".$d."\t";
+    //   }
+    // }
+    //
+    // // ... middle child
+    // if($this->childNodes["mid"] != NULL){
+    //   $d = $this->childNodes["mid"]->getData();
+    //
+    //   if(gettype($d) == "array"){
+    //     echo "M: ".implode(', ', $d)."\t";
+    //   }
+    //   else{
+    //     echo "M: ".$d."\t";
+    //   }
+    // }
+    // // ... middle-right child
+    // if($this->childNodes["MR"] != NULL){
+    //   $d = $this->childNodes["MR"]->getData();
+    //
+    //   if(gettype($d) == "array"){
+    //     echo "MR: ".implode(', ', $d)."\t";
+    //   }
+    //   else{
+    //     echo "MR: ".$d."\t";
+    //   }
+    // }
+    //
+    // // ... right child
+    // if($this->childNodes["right"] != NULL){
+    //   $d = $this->childNodes["right"]->getData();
+    //   if(gettype($d) == "array"){
+    //     echo "R: ".implode(', ', $d)."\t";
+    //   }
+    //   else{
+    //     echo "R: ".$d."\t";
+    //   }
+    // }
+    // // ... right-right child
+    // if($this->childNodes["RR"] != NULL){
+    //   $d = $this->childNodes["RR"]->getData();
+    //
+    //   if(gettype($d) == "array"){
+    //     echo "RR: ".implode(', ', $d)."\t";
+    //   }
+    //   else{
+    //     echo "RR: ".$d."\t";
+    //   }
+    // }
 
     echo "</ul>";
   }
@@ -153,11 +154,11 @@ class Node {
     // If data is an array push $d onto it
     // If data is not set just set data to $d
     if(!isset($this->data)){
-      echo "<ul><li>Data isn't set yet.</li></ul>";
+      // echo "<ul><li>Data isn't set yet.</li></ul>";
       $this->data = $d;
     }
     else{
-      echo "<ul><li>Data is set.</li></ul>";
+      // echo "<ul><li>Data is set.</li></ul>";
       if(gettype($this->data)=="integer"){
         $this->data = array($this->data);
       }
@@ -180,11 +181,10 @@ class Node {
 
   public function getParent(){
       if($this->parentNode != NULL){
-        echo "<li>Node has a parent. Returning it.</li>";
         return $this->parentNode;
       }
       else{
-        echo "<li>No parent node (Or something borked.)</li>";
+        // echo "<li>Node is a leaf.</li>";
         return NULL;
       }
   }
@@ -194,13 +194,6 @@ class Node {
   }
 
   public function getChild($c){
-    // Check for the temp node
-    // if($c == "lr" or "mr" or "rr"){
-    //   // Create the child node for whatever $c is
-    //
-    //   // Then return so we don't do the rest of the function
-    // }
-
     // Check for $c if not a temp node
     if($this->childNodes[$c] != NULL){
       return $this->childNodes[$c];
@@ -216,6 +209,10 @@ class Node {
 
   public function setChild($dir, $child){
     $this->childNodes[$dir] = $child;
+  }
+
+  public function clearChildren(){
+    $this->childNodes = array();
   }
 }
 ?>
