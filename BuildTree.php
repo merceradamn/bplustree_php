@@ -44,7 +44,7 @@ $root = new Node(); // Create the tree
 // $numList = array(4, 1, 3, 20, 5, 6, 23, 17, 18, 24, 13, 10, 22, 11, 14, 7);
 // $numList = array(30,40,30,-30,20,10,50,31);
 // $numList = array(5,10,15,4,3,2,1,6,11); // 1:left, 6:mid, 11:right
-$numList = array(1,2,3,4,5);
+$numList = array(10,20,30,15,35,25);
 
 echo "<h2>B+ Tree Implementation</h1>";
 echo "<h4>Adding a simple list of elements to the tree.</h4>";

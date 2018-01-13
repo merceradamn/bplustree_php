@@ -142,11 +142,70 @@ function split($curr){
   }
   else if($curr->getType() == "parent"){
     echo "<li>Passed a parent node to this function.</li>";
+
+    // Check if the node has a parent
+    $parNode = $curr->getParent(); // Get the parent node if one exists
+
+    // If node doesn't have a parent we were passed the root of the tree
+    if($parNode == NULL){
+      echo "<li>Root node, has no parent.</li>";
+
+      $LR = $curr->getChild("LR"); // Try to get the left-right child node
+      $MR = $curr->getChild("MR"); // Try to get the mid-right child node
+      $RR = $curr->getChild("RR"); // Try to get the right-right child node
+
+      // Based on which exists we choose a path, LR, MR, or RR
+      if($LR != NULL){
+        echo "<li>Left-Right child exists.</li>";
+        // Parent splits;
+      	// Par-Left; Left Child = Left;
+      	// 			Right Child = LR;
+        //
+      	// Par-right; Left Child = Mid;
+      	// 			Right Child = Right;
+      }
+      elseif($MR != NULL){
+        echo "<li>Mid-Right child exists.</li>";
+        // Parent splits;
+        // Par-Left; Left Child = Left;
+        //       Right Child = Mid;
+        //
+        // Par-right; Left Child = MR;
+        //       Right Child = Right;
+      }
+      elseif($RR != NULL){
+        echo "<li>Right-Right child exists.</li>";
+        // Parent splits;
+        // Par-Left; Left Child = Left;
+        //       Right Child = Mid;
+        //
+        // Par-right; Left Child = Right;
+        //       Right Child = RR;
+      }
+
+      return 0;
+    }
+    // If node has a parent we need to make sure it maintains it's children
+    else{
+      echo "<li>Inner node, has a parent.</li>";
+      return -1;
+    }
   }
 
-  // When finished return the count of the node's data
-  echo "<li>Count: ".count($curr->getData())."</li>";
-  return count($curr->getData());
+
+  // Let's check the parent node's count; if it's 3 we need to return it
+  $par = $curr->getParent();
+  if($par != NULL){
+    echo "<li>Count of Parent:".count($par->getData())."</li>";
+    return count($par->getData());
+  }
+  // Else let's just return the count of the node we were passed
+  else{
+    // When finished return the count of the node's data
+    echo "<li>Count: ".count($curr->getData())."</li>";
+    return count($curr->getData());
+  }
+
 }
 
 function insert($root, $num){
@@ -229,10 +288,6 @@ function insert($root, $num){
     else{
       echo "<li>Value isn't here. Add it.</li>";
       $curr->setData($num); // Add the data to the node
-      // echo "<ul><li>Node Data Count: ".$ndc."</li></ul>";
-      // echo "<ul><li>      Node Data: ";
-      // print_r($curr->getData());
-      // echo "</li></ul>";
 
       return 0;
     }
@@ -246,22 +301,20 @@ function insert($root, $num){
     else{
       echo "<li>Value isn't here. Add it.</li>";
       $ndc = $curr->setData($num);
-      // echo "<ul><li>Node Data Count: ".$ndc."</li></ul>";
-      // echo "<ul><li>      Node Data: ";
-      // print_r($curr->getData());
-      // echo "</li></ul>";
 
       // We should call the split as long as we return $ndc == 3
-      while(true){
-        echo "<li>Calling the split on the current node</li>";
-        $ndc = split($curr); // Call split on the node and return data count for par
+      while(true){ // Could change true to $ndc >= 3
+        echo "<li>Calling the split on the current node.</li>";
+        $ndc = split($curr); // Call split on node and return data count for par
 
         if($ndc == 3){
-          echo "<li>Need to split the parent now.<li>";
+          echo "<li>Need to split the parent now.</li>";
+          $curr = $curr->getParent(); // Traverse up to parent to split parent
         }
         else{
-          break;
+          break; // Break out since we don't need to call split
         }
+
       }
 
       echo "<li>Finished splitting nodes.</li>";
@@ -269,8 +322,7 @@ function insert($root, $num){
     }
   }
 
-  echo "<ul><li><strong>ERROR: Hole in logic tree.</strong></li></ul>";
-  return -1;
+  exit("<ul><li><strong>ERROR: Hole in logic tree.</strong></li></ul>");
 }
 
 function showTree($node){

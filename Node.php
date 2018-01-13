@@ -70,34 +70,70 @@ class Node {
     // Show left child
     if($this->childNodes["left"] != NULL){
       $d = $this->childNodes["left"]->getData();
-      echo "L: ".implode(', ', $d)."\t";
+
+      if(gettype($d) == "array"){
+        echo "L: ".implode(', ', $d)."\t";
+      }
+      else{
+        echo "L: ".$d."\t";
+      }
+
     }
     // Show left-right child if we have it
     if($this->childNodes["LR"] != NULL){
       $d = $this->childNodes["LR"]->getData();
-      echo "LR: ".implode(', ', $d)."\t";
+
+      if(gettype($d) == "array"){
+        echo "LR: ".implode(', ', $d)."\t";
+      }
+      else{
+        echo "LR: ".$d."\t";
+      }
     }
 
     // ... middle child
     if($this->childNodes["mid"] != NULL){
       $d = $this->childNodes["mid"]->getData();
-      echo "M: ".implode(', ', $d)."\t";
+
+      if(gettype($d) == "array"){
+        echo "M: ".implode(', ', $d)."\t";
+      }
+      else{
+        echo "M: ".$d."\t";
+      }
     }
     // ... middle-right child
     if($this->childNodes["MR"] != NULL){
       $d = $this->childNodes["MR"]->getData();
-      echo "MR: ".implode(', ', $d)."\t";
+
+      if(gettype($d) == "array"){
+        echo "MR: ".implode(', ', $d)."\t";
+      }
+      else{
+        echo "MR: ".$d."\t";
+      }
     }
 
     // ... right child
     if($this->childNodes["right"] != NULL){
       $d = $this->childNodes["right"]->getData();
-      echo "R: ".implode(', ', $d)."\t";
+      if(gettype($d) == "array"){
+        echo "R: ".implode(', ', $d)."\t";
+      }
+      else{
+        echo "R: ".$d."\t";
+      }
     }
     // ... right-right child
     if($this->childNodes["RR"] != NULL){
       $d = $this->childNodes["RR"]->getData();
-      echo "RR: ".implode(', ', $d)."\t";
+
+      if(gettype($d) == "array"){
+        echo "RR: ".implode(', ', $d)."\t";
+      }
+      else{
+        echo "RR: ".$d."\t";
+      }
     }
 
     echo "</ul>";
@@ -130,7 +166,8 @@ class Node {
       sort($this->data);
     }
 
-      return count($this->data);
+    // Let's return the count of the node we just added data to for working with
+    return count($this->data);
   }
 
   public function getType(){
