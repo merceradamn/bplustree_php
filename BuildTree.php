@@ -39,7 +39,8 @@ function printNumList($nl){
 $root = new Node(); // Create the tree
 // $numList = array(4, 1, 3, 20, 5, 6, 23, 17, 18, 24, 13, 10, 22, 11, 14, 7);
 // $numList = array(5,3,2,4,1);
-$numList = array(30,40,30,-30,20,10,50,31);
+// $numList = array(30,40,30,-30,20,10,50,31);
+$numList = array(5,10,15,4,3,2,1);
 
 echo "<h2>B+ Tree Implementation</h1>";
 echo "<h4>Adding a simple list of elements to the tree.</h4>";
@@ -62,13 +63,20 @@ foreach($numList as $num){
     echo "<ol><li>Deleting ".$num." from the tree.</li>";
     // Convert number to positive before passing to delete function
     $num *= -1;
-    echo "<li>".$num."</li></ol><hr>";
+    echo "<li>\"Deleted\" ".$num."</li></ol><hr>";
   }
 
 }
 
 // Show the tree after inserting
-echo "<h2><strong>Final Tree</strong></h2>";
+echo "<h2><strong>Tree after list processing: </strong></h2>";
 showTree($root);
+echo "<hr>";
 
+// Add a test value for root splitting
+// insert($root, 25); // Should split left child and then split the root/parent
+// echo "<h2><strong>Final Tree</strong></h2>";
+// showTree($root);
+
+// require_once "views/view_tree.php";
 ?>

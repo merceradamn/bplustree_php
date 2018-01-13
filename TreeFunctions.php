@@ -39,21 +39,17 @@ function split($curr){
     $leftChild->setParent($curr); // Attach the parent to the left child
     $rightChild->setParent($curr); // Attach the parent to the right child
 
-    // Check the node changes before we leave
-    // echo "<ul>Here's the node changes:";
-    // $curr->showData();
-    // echo "</ul></ul>";
-    echo "</ul>";
+    echo "</ul>"; // Formatting HTML; should be gone after we polish
   }
   // Case where current node has a parent
   else if($parNode != NULL){
     $parLC = $parNode->getChild("left"); // Get left child of parent
     $parMC = $parNode->getChild("mid"); // Get mid child of parent
     $parRC = $parNode->getChild("right"); // Get right child of parent
-    $currData = $curr->getData(); // Get the node's data
+    $currData = $curr->getData(); // Get the passed node's data
 
     // Case where parent has two children; left & right
-    if($parLC and $parRC != NULL){
+    if($parLC and $parRC != NULL and $parMC == NULL){
       // echo "Left child Data: "; print_r($parLC->getData());
       // echo "<br>Right child Data: "; print_r($parRC->getData());
       // echo "<br>Current node Data: "; print_r($curr->getData());
@@ -61,6 +57,16 @@ function split($curr){
       // Check if we went left or right
       if($parLC->getData() == $curr->getData()){
         echo "We are splitting the left child.<br>";
+
+        $parNode->setData($currData[1]); // Add middle value in curr to parent
+
+        $midChild = new Node(); // Create node that'll be parNode's mid child
+        $midChild->setData($currData[1]); $midChild->setData($currData[2]);
+        $midChild->setParent($parNode); // Set mid child's parent
+        $parNode->setChild("mid", $midChild);
+
+        // Reset the data in left child and add first value
+        $curr->setData($currData[0], 1);
 
       }
       elseif($parRC->getData() == $curr->getData()){
@@ -80,16 +86,13 @@ function split($curr){
     // Case where parent has three children; left, mid & right
     elseif($parLC and $parMC and $parRC != NULL){
       echo "Left, mid & right children.<br>";
+      return 0;
     }
     else{
-      echo "Some children are missing.<br>";
+      echo "ERROR: Logic hole in split function.<br>";
       return -99;
     }
 
-    // Check the node changes before we leave
-    // echo "<ul>Here's the node changes:";
-    // $curr->showData();
-    // echo "</ul></ul>";
     echo "</ul>";
   }
 
@@ -118,17 +121,15 @@ function insert($root, $num){
     if(gettype($cd)=="integer"){
       // Case where node just has two children; left & right
       // A parent node with just one data value will never have 3 children
-      if($curr->getChild("mid") == NULL){
-        if($num < $cd){
-          // Case where $num is lower than value
-          echo "<li>Moved left.</li>";
-          $curr = $curr->getChild("left");
-        }
-        else{
-          // Case where $num is higher than value
-          echo "<li>Moved right.</li>";
-          $curr = $curr->getChild("right");
-        }
+      if($num < $cd){
+        // Case where $num is lower than value
+        echo "<li>Moved left.</li>";
+        $curr = $curr->getChild("left");
+      }
+      else{
+        // Case where $num is higher than value
+        echo "<li>Moved right.</li>";
+        $curr = $curr->getChild("right");
       }
     }
     // Case where data is an array of values
@@ -158,14 +159,14 @@ function insert($root, $num){
           echo "<li>Moved mid.</li>";
           $curr = $curr->getChild("mid");
         }
-        elseif($num > $cd[1]){
+        elseif($num >= $cd[1]){ // I think here might need to be ">=" over ">"
           echo "<li>Moved right.</li>";
           $curr = $curr->getChild("right");
         }
       }
     }
     else{
-      echo "It's a steak sandwich?<br>";
+      echo "ERROR: Logic hole here.<br>"; // Array or Integer, problem if here
     }
   }
 
@@ -180,10 +181,10 @@ function insert($root, $num){
     else{
       echo "<li>Value isn't here. Add it.</li>";
       $ndc = $curr->setData($num);
-      echo "<ul><li>Node Data Count: ".$ndc."</li></ul>";
-      echo "<ul><li>      Node Data: ";
-      print_r($curr->getData());
-      echo "</li></ul>";
+      // echo "<ul><li>Node Data Count: ".$ndc."</li></ul>";
+      // echo "<ul><li>      Node Data: ";
+      // print_r($curr->getData());
+      // echo "</li></ul>";
 
       // We should call the split as long as we return $ndc == 3
       while($ndc >= 3){
@@ -206,7 +207,7 @@ function insert($root, $num){
       $ndc = $curr->setData($num);
       // echo "<ul><li>Node Data Count: ".$ndc."</li></ul>";
       // echo "<ul><li>      Node Data: ";
-      print_r($curr->getData());
+      // print_r($curr->getData());
       // echo "</li></ul>";
 
       // We should call the split as long as we return $ndc == 3

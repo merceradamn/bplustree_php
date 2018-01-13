@@ -32,6 +32,7 @@ class Node {
     $this->childNodes["left"] = NULL;
     $this->childNodes["mid"] = NULL;
     $this->childNodes["right"] = NULL;
+
   }
 
   public function showData(){
@@ -87,7 +88,7 @@ class Node {
   }
 
   public function setData($d, $r = 0){
-    // If $r is 1 then clear data before setting
+    // If $r is 1 then clear data before setting with passed data
     if($r == 1){
       echo "<li>Reset node's data.</li>";
       $this->data = NULL;
@@ -136,6 +137,14 @@ class Node {
   }
 
   public function getChild($c){
+    // Check for the temp node
+    // if($c == "lr" or "mr" or "rr"){
+    //   // Create the child node for whatever $c is
+    //
+    //   // Then return so we don't do the rest of the function
+    // }
+
+    // Check for $c if not a temp node
     if($this->childNodes[$c] != NULL){
       return $this->childNodes[$c];
     }
