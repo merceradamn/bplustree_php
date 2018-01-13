@@ -13,6 +13,8 @@ and when it is needed to debug.
 require "Node.php";
 require "TreeFunctions.php";
 
+// error_reporting(0); // Disables error reporting
+
 function printNumList($nl){
   if(isset($nl)){
     $c = count($nl);
@@ -37,10 +39,12 @@ function printNumList($nl){
 ##### MAIN CODE #####
 
 $root = new Node(); // Create the tree
+
+// Test lists for the B tree
 // $numList = array(4, 1, 3, 20, 5, 6, 23, 17, 18, 24, 13, 10, 22, 11, 14, 7);
-// $numList = array(5,3,2,4,1);
 // $numList = array(30,40,30,-30,20,10,50,31);
-$numList = array(5,10,15,4,3,2,1);
+// $numList = array(5,10,15,4,3,2,1,6,11); // 1:left, 6:mid, 11:right
+$numList = array(1,2,3,4,5);
 
 echo "<h2>B+ Tree Implementation</h1>";
 echo "<h4>Adding a simple list of elements to the tree.</h4>";

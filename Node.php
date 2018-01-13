@@ -33,6 +33,10 @@ class Node {
     $this->childNodes["mid"] = NULL;
     $this->childNodes["right"] = NULL;
 
+    // These are temporary when a parent needs to split too
+    $this->childNodes["LR"] = NULL;
+    $this->childNodes["MR"] = NULL;
+    $this->childNodes["RR"] = NULL;
   }
 
   public function showData(){
@@ -65,19 +69,35 @@ class Node {
 
     // Show left child
     if($this->childNodes["left"] != NULL){
-      // echo "<li>Has a left child node.</li>";
-      $this->childNodes["left"]->getData();
-      $a = 1;
+      $d = $this->childNodes["left"]->getData();
+      echo "L: ".implode(', ', $d)."\t";
     }
+    // Show left-right child if we have it
+    if($this->childNodes["LR"] != NULL){
+      $d = $this->childNodes["LR"]->getData();
+      echo "LR: ".implode(', ', $d)."\t";
+    }
+
     // ... middle child
     if($this->childNodes["mid"] != NULL){
-      // echo "<li>Has a mid child node.</li>";
-      $b = 2;
+      $d = $this->childNodes["mid"]->getData();
+      echo "M: ".implode(', ', $d)."\t";
     }
+    // ... middle-right child
+    if($this->childNodes["MR"] != NULL){
+      $d = $this->childNodes["MR"]->getData();
+      echo "MR: ".implode(', ', $d)."\t";
+    }
+
     // ... right child
     if($this->childNodes["right"] != NULL){
-      // echo "<li>Has a right child node.</li>";
-      $c = 3;
+      $d = $this->childNodes["right"]->getData();
+      echo "R: ".implode(', ', $d)."\t";
+    }
+    // ... right-right child
+    if($this->childNodes["RR"] != NULL){
+      $d = $this->childNodes["RR"]->getData();
+      echo "RR: ".implode(', ', $d)."\t";
     }
 
     echo "</ul>";
@@ -151,6 +171,10 @@ class Node {
     else{
       return NULL;
     }
+  }
+
+  public function getChildren(){
+      return $this->childNodes;
   }
 
   public function setChild($dir, $child){

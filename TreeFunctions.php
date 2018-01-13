@@ -7,96 +7,144 @@ vague as to what it is that I'm trying to do.
 <?php
 
 function split($curr){
-  // We're passed a leaf node that we need to split
-  echo "<ul>";
-  $parNode = $curr->getParent(); // Check for a parent node and store it
-  // Case where current node has no parent
-  if($parNode == NULL){
-    echo "<li>Leaf node has no parent. Let's change that.</li>";
-    $currData = $curr->getData(); // Get the node's data
+  if($curr->getType() == "leaf"){
+    // We're passed a leaf node that we need to split
+    echo "<ul>";
+    $parNode = $curr->getParent(); // Check for a parent node and store it
+    // Case where current node has no parent
+    if($parNode == NULL){
+      echo "<li>Leaf node has no parent. Let's change that.</li>";
+      $currData = $curr->getData(); // Get the node's data
 
-    echo "<li>Working on left node first.</li>";
-    // Left value goes in left node
-    $leftChild = new Node(); // Create the leaf node
-    $leftChild->setData($currData[0]); // Add the left value
+      echo "<li>Working on left node first.</li>";
+      // Left value goes in left node
+      $leftChild = new Node(); // Create the leaf node
+      $leftChild->setData($currData[0]); // Add the left value
 
-    echo "<li>Working on right node now.</li>";
-    // Mid and Right values go in right node
-    $rightChild = new Node(); // Create the node
-    $rightChild->setData($currData[1]); // Add the mid value
-    $rightChild->setData($currData[2]); // Add the right value
+      echo "<li>Working on right node now.</li>";
+      // Mid and Right values go in right node
+      $rightChild = new Node(); // Create the node
+      $rightChild->setData($currData[1]); // Add the mid value
+      $rightChild->setData($currData[2]); // Add the right value
 
-    echo "<li>Attaching to current node now.</li>";
-    // Mid value also goes in a new parent node
-    // Just change current node instead of making new node/reassigning
-    $curr->setType("parent"); // Set the type to "parent"
-    $curr->setData($currData[1], 1); // Set the data of the node
+      echo "<li>Attaching to current node now.</li>";
+      // Mid value also goes in a new parent node
+      // Just change current node instead of making new node/reassigning
+      $curr->setType("parent"); // Set the type to "parent"
+      $curr->setData($currData[1], 1); // Set the data of the node
 
-    // Connect the nodes now
-    $curr->setChild("left", $leftChild); // Attach the left child
-    $curr->setChild("right", $rightChild); // Attach the right child
+      // Connect the nodes now
+      $curr->setChild("left", $leftChild); // Attach the left child
+      $curr->setChild("right", $rightChild); // Attach the right child
 
-    $leftChild->setParent($curr); // Attach the parent to the left child
-    $rightChild->setParent($curr); // Attach the parent to the right child
+      $leftChild->setParent($curr); // Attach the parent to the left child
+      $rightChild->setParent($curr); // Attach the parent to the right child
 
-    echo "</ul>"; // Formatting HTML; should be gone after we polish
-  }
-  // Case where current node has a parent
-  else if($parNode != NULL){
-    $parLC = $parNode->getChild("left"); // Get left child of parent
-    $parMC = $parNode->getChild("mid"); // Get mid child of parent
-    $parRC = $parNode->getChild("right"); // Get right child of parent
-    $currData = $curr->getData(); // Get the passed node's data
+      echo "</ul>"; // Formatting HTML; should be gone after we polish
+    }
+    // Case where current node has a parent
+    else if($parNode != NULL){
+      $parLC = $parNode->getChild("left"); // Get left child of parent
+      $parMC = $parNode->getChild("mid"); // Get mid child of parent
+      $parRC = $parNode->getChild("right"); // Get right child of parent
+      $currData = $curr->getData(); // Get the passed node's data
 
-    // Case where parent has two children; left & right
-    if($parLC and $parRC != NULL and $parMC == NULL){
-      // echo "Left child Data: "; print_r($parLC->getData());
-      // echo "<br>Right child Data: "; print_r($parRC->getData());
-      // echo "<br>Current node Data: "; print_r($curr->getData());
+      // Case where parent has two children; left & right
+      if($parLC and $parRC != NULL and $parMC == NULL){
+        // echo "Left child Data: "; print_r($parLC->getData());
+        // echo "<br>Right child Data: "; print_r($parRC->getData());
+        // echo "<br>Current node Data: "; print_r($curr->getData());
 
-      // Check if we went left or right
-      if($parLC->getData() == $curr->getData()){
-        echo "We are splitting the left child.<br>";
+        // Check if we went left or right
+        if($parLC->getData() == $currData){
+          echo "We are splitting the left child.<br>";
 
-        $parNode->setData($currData[1]); // Add middle value in curr to parent
+          $parNode->setData($currData[1]); // Add middle value in curr to parent
 
-        $midChild = new Node(); // Create node that'll be parNode's mid child
-        $midChild->setData($currData[1]); $midChild->setData($currData[2]);
-        $midChild->setParent($parNode); // Set mid child's parent
-        $parNode->setChild("mid", $midChild);
+          $midChild = new Node(); // Create node that'll be parNode's mid child
+          $midChild->setData($currData[1]); $midChild->setData($currData[2]);
+          $midChild->setParent($parNode); // Set mid child's parent
+          $parNode->setChild("mid", $midChild);
 
-        // Reset the data in left child and add first value
-        $curr->setData($currData[0], 1);
+          // Reset the data in left child and add first value
+          $curr->setData($currData[0], 1);
+
+        }
+        elseif($parRC->getData() == $currData){
+          echo "We are splitting the right child.<br>";
+
+          $parNode->setData($currData[1]); // Add middle value in curr to parent
+          // Create the new node, set the data, and make it parent's mid child
+          $midChild = new Node(); $midChild->setData($currData[0]);
+          $midChild->setParent($parNode); // Set mid child's parent
+          $parNode->setChild("mid", $midChild);
+
+          $curr->setData($currData[1], 1); // Reset current's data and add mid
+          $curr->setData($currData[2]); // Add the right value in current
+        }
 
       }
-      elseif($parRC->getData() == $curr->getData()){
-        echo "We are splitting the right child.<br>";
+      // Case where parent has three children; left, mid & right
+      elseif($parLC and $parMC and $parRC != NULL){
+        echo "Left, mid & right children.<br>";
 
-        $parNode->setData($currData[1]); // Add middle value in curr to parent
-        // Create the new node, set the data, and make it parent's mid child
-        $midChild = new Node(); $midChild->setData($currData[0]);
-        $midChild->setParent($parNode); // Set mid child's parent
-        $parNode->setChild("mid", $midChild);
+        // Figure out which child we were trying to split
+        if($parLC->getData() == $currData){
+          echo "We're splitting the left child.<br>";
 
-        $curr->setData($currData[1], 1); // Reset current's data and add mid
-        $curr->setData($currData[2]); // Add the right value in current
+          // We're making a new node called "LR" to be added to parent
+          $leftRightChild = new Node();
+          $leftRightChild->setData($currData[1]);// Set node's data with middle
+          $leftRightChild->setData($currData[2]); // Add the right value to node
+          $leftRightChild->setParent($parNode); // Set parent of LRC to parent
+          $parNode->setData($currData[1]); // Middle value gets pushed to parent
+          $parNode->setChild("LR", $leftRightChild); // Set child of parent
+          $curr->setData($currData[0], 1); // Adjust curr child node's data now
+
+        }
+        else if($parMC->getData() == $currData){
+          echo "We're splitting the middle child.<br>";
+
+          // We're making a new node called "MR" to be added to parent
+          $midRightChild = new Node();
+          $midRightChild->setData($currData[1]);// Set node's data with middle
+          $midRightChild->setData($currData[2]); // Add the right value to node
+          $midRightChild->setParent($parNode); // Set parent of MRC to parent
+          $parNode->setData($currData[1]); // Middle value gets pushed to parent
+          $parNode->setChild("MR", $midRightChild); // Set child of parent
+          $curr->setData($currData[0], 1); // Adjust curr child node's data now
+
+        }
+        else if($parRC->getData() == $currData){
+          echo "We're splitting the right child.<br>";
+
+          // We're making a new node called "RR" to be added to parent
+          $rightRightChild = new Node();
+          $rightRightChild->setData($currData[1]);// Set node's data with middle
+          $rightRightChild->setData($currData[2]); // Add the right value to node
+          $rightRightChild->setParent($parNode); // Set parent of MRC to parent
+          $parNode->setData($currData[1]); // Middle value gets pushed to parent
+          $parNode->setChild("RR", $rightRightChild); // Set child of parent
+          $curr->setData($currData[0], 1); // Adjust curr child node's data now
+        }
+
+      }
+      else{
+        echo "ERROR: Logic hole in split function.<br>";
+        echo "</ul>";
+        return -99;
       }
 
-    }
-    // Case where parent has three children; left, mid & right
-    elseif($parLC and $parMC and $parRC != NULL){
-      echo "Left, mid & right children.<br>";
-      return 0;
-    }
-    else{
-      echo "ERROR: Logic hole in split function.<br>";
-      return -99;
+      $pchild = $parNode->getChildren(); // Get the children of the parent
+      echo "</ul>";
     }
 
-    echo "</ul>";
+  }
+  else if($curr->getType() == "parent"){
+    echo "<li>Passed a parent node to this function.</li>";
   }
 
-  // When finished return the count of parent node's data
+  // When finished return the count of the node's data
   echo "<li>Count: ".count($curr->getData())."</li>";
   return count($curr->getData());
 }
@@ -180,19 +228,12 @@ function insert($root, $num){
     }
     else{
       echo "<li>Value isn't here. Add it.</li>";
-      $ndc = $curr->setData($num);
+      $curr->setData($num); // Add the data to the node
       // echo "<ul><li>Node Data Count: ".$ndc."</li></ul>";
       // echo "<ul><li>      Node Data: ";
       // print_r($curr->getData());
       // echo "</li></ul>";
 
-      // We should call the split as long as we return $ndc == 3
-      while($ndc >= 3){
-        echo "<li>Calling the split on the current node</li>";
-        $ndc = split($curr);
-      }
-
-      echo "<li>Finished splitting nodes.</li>";
       return 0;
     }
   }
@@ -211,9 +252,16 @@ function insert($root, $num){
       // echo "</li></ul>";
 
       // We should call the split as long as we return $ndc == 3
-      while($ndc >= 3){
+      while(true){
         echo "<li>Calling the split on the current node</li>";
-        $ndc = split($curr);
+        $ndc = split($curr); // Call split on the node and return data count for par
+
+        if($ndc == 3){
+          echo "<li>Need to split the parent now.<li>";
+        }
+        else{
+          break;
+        }
       }
 
       echo "<li>Finished splitting nodes.</li>";
